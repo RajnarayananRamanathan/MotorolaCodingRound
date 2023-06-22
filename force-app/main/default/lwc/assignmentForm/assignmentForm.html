@@ -1,37 +1,32 @@
-<template>    
-    <lightning-record-edit-form object-api-name={objectName} record-id={recordId} onsuccess={handleSuccess}>
-        <div class="slds-grid">
-            <div class="slds-col slds-size_1-of-2">
-                <lightning-input-field field-name={nameField} required> </lightning-input-field>
+<template>        
+        <div class="slds-grid slds-wrap">            
+            <div class="slds-p-horizontal--small slds-col slds-size_6-of-12 slds-m-bottom--medium">
+                <div class="slds-form-element">
+                    <lightning-input class='nameCls' type="text" name = "Name" label="Name" value={row.Name} required onchange={handleChange}></lightning-input>
+                </div>
             </div>
-            <div class="slds-col slds-size_1-of-2">
-                <lightning-input-field field-name={titleField}> </lightning-input-field>
+            <div class="slds-p-horizontal--small slds-col slds-size_6-of-12 slds-m-bottom--medium">
+                <div class="slds-form-element">
+                    <lightning-input type="text" name="Title__c" label="Title" value={row.Title__c} onchange={handleChange}></lightning-input>
+                </div>  
+            </div>   
+            <div class="slds-p-horizontal--small slds-col slds-size_6-of-12 slds-m-bottom--medium">
+                <div class="slds-form-element">               
+                    <lightning-textarea name="Description__c" label="Description" value={row.Description__c} onchange={handleChange}></lightning-textarea>
+                </div>
             </div>
-        </div>  
-        <div class="slds-grid">
-            <div class="slds-col slds-size_1-of-2">
-                <lightning-input-field field-name={descField}> </lightning-input-field>
+            <div class="slds-p-horizontal--small slds-col slds-size_6-of-12 slds-m-bottom--medium">
+                <div class="slds-form-element">
+                    <lightning-input type="date" name="DueDate__c" label="Due Date" value={row.DueDate__c} onchange={handleChange}></lightning-input>                
+                </div>
             </div>
-            <div class="slds-col slds-size_1-of-2">
-                <lightning-input-field field-name={dueDateField}> </lightning-input-field>
-            </div>
-        </div>  
-        <div class="slds-grid">
-            <div class="slds-col slds-size_1-of-2">
-                <lightning-input-field field-name={statusField}> </lightning-input-field>  
-            </div>
-            <div class="slds-col slds-size_1-of-2">                
-            </div>
-        </div>    
-        <div class="slds-grid slds-page-header">
-            <div class="slds-col slds-size_1-of-2">
-            </div>
-            <div class="slds-col slds-size_1-of-2">
-                <lightning-button class="slds-float_right slds-p-horizontal_xx-small" float="right" variant="brand" type="submit" name="save" label="Save">
-                </lightning-button> 
-                <lightning-button class="slds-float_right slds-p-horizontal_xx-small"  variant="neutral" type="cancel" name="cancel" label="Cancel" onclick={handleCancel}>
-                </lightning-button>                
-            </div>        
-        </div>                
-</lightning-record-edit-form>
+            <div class="slds-p-horizontal--small slds-col slds-size_6-of-12 slds-m-bottom--medium">
+                <div class="slds-form-element">
+                    <template if:true={statusValues.data}>
+                        <lightning-combobox name="Status__c" label="Status" value={row.Status__c} options={statusValues.data.values} onchange={handleChange}>
+                        </lightning-combobox> 
+                    </template>
+                </div>
+            </div>            
+        </div>                  
 </template> 

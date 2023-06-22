@@ -55,9 +55,13 @@
                     <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">{actionType} Assignment</h2>
                 </header>
                 <!-- Modal/Popup Box LWC body starts here -->
-                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
-                   <c-assignment-form object-name="Assignment__c" record-id={editRecordId} oncancel={closeModal} onsave={saveRecords} onerrorsave={onSaveError} onshowspinner={showSpinner}></c-assignment-form>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1"> 
+                   <c-assignment-form object-name="Assignment__c" record-id={editRecordId} oncancel={closeModal} onsave={saveRecords} onerrorsave={onSaveError} onshowspinner={showSpinner} row={currenctRecord}></c-assignment-form>
                 </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick={closeModal} title="Cancel">Cancel</button>
+                    <button class="slds-button slds-button_brand" onclick={submitDetails} title="OK">Save</button>
+                </footer>
             </div>
         </section>
         <div class="slds-backdrop slds-backdrop_open"></div>

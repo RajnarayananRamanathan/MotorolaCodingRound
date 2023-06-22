@@ -13,16 +13,17 @@ export default class AssignmentList extends LightningElement {
     searchData = [];
     @track datatableData = [];
     currentPage = 1;
-    recordstodisplay = 3;
+    recordstodisplay = 5;
     totdalRecordsSize = 0;
-    isSearch = false;
-    editRecordId;
+    isSearch = false;    
     actionType;
     isModalOpen = false;
     isShowSpinner = true;
     @track wireResult = [];
+    currenctRecord = {"Id":null, "Name":"","Title__c":"", "Status__c":"", "DueDate__c":"", "Description__c":""};
 
 
+    //wire function will be called to get all the assignment records
     @wire(getAssignmentRecords, {})
     apexResponse(result){
         this.wireResult = result;        
@@ -41,39 +42,7 @@ export default class AssignmentList extends LightningElement {
             }        
     }
 
-    get initialDataSize(){
-        return this.initialData.length > 0;
-    }
-
-    get dataSize(){
-        return this.datatableData.length > 0;
-    }
-
-    get columns(){
-        return [
-            { label: 'Name', fieldName: 'Name',type:'text' },            
-            {
-                label: 'Title',
-                fieldName: 'TitleLink',
-                type: 'url',
-                typeAttributes: { label: { fieldName: 'Title__c' }, target: '_blank',tooltip: { fieldName: 'Title__c' } }
-            },
-            { label: 'Status', fieldName: 'Status__c', type: 'text' },                        
-            { label: 'Due Date', fieldName: 'DueDate__c', type: 'date' },
-            { label: 'Description', fieldName: 'Description__c', type: 'text' },
-            { type: 'action', typeAttributes: { rowActions: actions }}
-        ];
-    }
-
-    showToast(title,message,variant) {
-        const event = new ShowToastEvent({
-            title: title,
-            message:message,
-            variant:variant            
-        });
-        this.dispatchEvent(event);
-    }
-
+    //Function is used to filter record based on title field
     handleSearch(event){
         let searchKey = event.target.value;        
         this.currentPage = 1;
@@ -98,6 +67,7 @@ export default class AssignmentList extends LightningElement {
         }        
     }
 
+    //Function is used to display records with pagination
     displayRecords(recordstodisplay,datatablerecords){                       
         let finalTable = [];
         let counter = (this.currentPage-1 >= 0 ? this.currentPage-1 : 0) * recordstodisplay;
@@ -114,39 +84,47 @@ export default class AssignmentList extends LightningElement {
         this.noSpinner();       
     }  
 
+    //Function will be called when edit actions is performed in row
     handleRowActions(event) {
         const actionName = event.detail.action.name;
-        const row = event.detail.row;        
+        const row = event.detail.row;    
+        console.log('row-->'+JSON.stringify(row));
         switch (actionName) {
             case 'Edit':
-                this.editRecordId = row.Id;            
+                this.currenctRecord = row;                
                 this.actionType = 'Edit';
                 this.isModalOpen = true;
                 break;
         }
     }
 
-    handleClick(){
-        this.editRecordId = null;            
+    //Function will be called when new button is clicked
+    handleClick(){                  
         this.actionType = 'New';
+        this.currenctRecord = {"Id":null, "Name":"","Title__c":"", "Status__c":"", "DueDate__c":"", "Description__c":""};
         this.isModalOpen = true;
+    }
+
+    //Function will be called when save button is clicked on modal
+    submitDetails(){
+        this.showSpinner();
+        this.template.querySelector('c-assignment-form').handleSave();
     }
 
     saveRecords(){
         refreshApex(this.wireResult);
         this.closeModal();
-        this.showToast('Success','Record has been saved successfully.','success');
-        this.noSpinner();
+        this.showToast('Success','Record has been saved successfully.','success');        
     }
 
     onSaveError(event){
         this.closeModal();
-        this.showToast('Error',event.detail.errormessage,'error');
-        this.noSpinner();
+        this.showToast('Error',event.detail.errormessage,'error');        
     }
 
     closeModal(){
         this.isModalOpen = false;
+        this.noSpinner();
     }
 
     showSpinner(){
@@ -187,5 +165,38 @@ export default class AssignmentList extends LightningElement {
 
     get isNextdisabled(){        
         return this.currentPage < this.getTotalPage ? false : true;
+    }
+
+    get initialDataSize(){
+        return this.initialData.length > 0;
+    }
+
+    get dataSize(){
+        return this.datatableData.length > 0;
+    }
+
+    get columns(){
+        return [
+            { label: 'Name', fieldName: 'Name',type:'text' },            
+            {
+                label: 'Title',
+                fieldName: 'TitleLink',
+                type: 'url',
+                typeAttributes: { label: { fieldName: 'Title__c' }, target: '_blank',tooltip: { fieldName: 'Title__c' } }
+            },
+            { label: 'Status', fieldName: 'Status__c', type: 'text' },                        
+            { label: 'Due Date', fieldName: 'DueDate__c', type: 'date' },
+            { label: 'Description', fieldName: 'Description__c', type: 'text' },
+            { type: 'action', typeAttributes: { rowActions: actions }}
+        ];
+    }
+
+    showToast(title,message,variant) {
+        const event = new ShowToastEvent({
+            title: title,
+            message:message,
+            variant:variant            
+        });
+        this.dispatchEvent(event);
     }
 }
