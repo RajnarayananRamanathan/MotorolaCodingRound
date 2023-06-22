@@ -25,7 +25,7 @@ export default class AssignmentForm extends LightningElement {
             saveAssignment({record:this.row}).then(result=>{            
                 this.dispatchEvent(new CustomEvent('save'));
             }).catch(error=>{            
-                this.dispatchEvent(new CustomEvent('errorsave',{detail : {errormessage:'Record Save Failed'}}));
+                this.dispatchEvent(new CustomEvent('errorsave',{detail : {errormessage:'Record Save Failed. Please Contact Your System Admin.'}}));
             });
         }           
     }
