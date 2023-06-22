@@ -111,30 +111,36 @@ export default class AssignmentList extends LightningElement {
         this.template.querySelector('c-assignment-form').handleSave();
     }
 
+    //Function will be called after the records id created or updated
     saveRecords(){
         refreshApex(this.wireResult);
         this.closeModal();
         this.showToast('Success','Record has been saved successfully.','success');        
     }
 
+    //Function will be called when an error occurs in save operation
     onSaveError(event){
         this.closeModal();
         this.showToast('Error',event.detail.errormessage,'error');        
     }
 
+    //Function is used to close the modal
     closeModal(){
         this.isModalOpen = false;
         this.noSpinner();
     }
 
+    //Function is used to show the spinner in table
     showSpinner(){
         this.isShowSpinner = true;   
     }
 
+    //Function is used to hide the spinner in table
     noSpinner(){
         this.isShowSpinner = false; 
     }     
 
+    //Function is used to naivagate through table during pagination
     handlePreviousNext(event){
         console.log(event.target.title);
         const dataToSend = this.isSearch ? this.searchData : this.initialData;
@@ -152,6 +158,7 @@ export default class AssignmentList extends LightningElement {
         }      
     }
 
+    //getter to get the total pages
     get getTotalPage(){
         const quotient = Math.floor(this.totdalRecordsSize / this.recordstodisplay);         
         const remainder = this.totdalRecordsSize % this.recordstodisplay;         
@@ -159,22 +166,27 @@ export default class AssignmentList extends LightningElement {
         return Number(noofpages);
     }
 
+    //getter to check the previous button is enabled or not in pagination
     get isPreviousdisabled(){        
         return ( (this.currentPage <= this.getTotalPage) && (this.currentPage > 1 ) ) ? false : true;
     }
 
+    //getter to check the next button is enabled or not in pagination
     get isNextdisabled(){        
         return this.currentPage < this.getTotalPage ? false : true;
     }
 
+    //getter to check the total size of records
     get initialDataSize(){
         return this.initialData.length > 0;
     }
 
+    //getter to check the size of records in current user view
     get dataSize(){
         return this.datatableData.length > 0;
     }
 
+    //getter to get the columns
     get columns(){
         return [
             { label: 'Name', fieldName: 'Name',type:'text' },            
@@ -191,6 +203,7 @@ export default class AssignmentList extends LightningElement {
         ];
     }
 
+    //function to display toast message
     showToast(title,message,variant) {
         const event = new ShowToastEvent({
             title: title,
