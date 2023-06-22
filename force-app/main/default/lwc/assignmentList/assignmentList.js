@@ -187,6 +187,7 @@ export default class AssignmentList extends LightningElement {
     }
 
     //getter to get the columns
+    //Displayed name field in table as well as input form, as name field is the required field for the object.
     get columns(){
         return [
             { label: 'Name', fieldName: 'Name',type:'text' },            
